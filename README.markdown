@@ -15,6 +15,34 @@ information.
 
 ![Build Status](https://github.com/pycollada/pycollada/actions/workflows/python-package.yml/badge.svg)
 
+## ogsadmin notes
+
+This is a fork of [pycollada](https://github.com/pycollada) to allow custom node names. All changes 
+are done in the [add-optional-node-name branch](https://github.com/ogsadmin/pycollada/tree/add-optional-node-name)
+and integrated into the official build through the [pycollada pull request 131](https://github.com/pycollada/pycollada/pull/131).
+
+The actual aim of this change is to make FreeCAD export the "correct" node names to the collada file, so a *.gltf file for web can be generated (and displayed/modified using [babylonjs](https://www.babylonjs.com/)). The main benefit is that this allows a workflow for converting step files to *.gltf files without loosing the structural (component names) information. 
+This would work in combination with the updated FreeCAD Collada *.dae exporter (from the forum [A more user friendly Collada .dae exporter](https://forum.freecad.org/viewtopic.php?t=14613)).
+
+The overall process is then as follows:
+- import the *.stp file into FreeCAD
+- select everything and export it as Collada (*.dae) file (using the updated collada exporter)
+- use COLLADA2GLTF to convert the collada file to a gltf file
+
+Here is a sample batch file:
+
+    @echo off
+    :: To use a STEP mode, open it in Freecad and export is as COLLADA (*.dae)
+    set MODELPATH=..\models
+    :: Use only filename without extension
+    ::set FILENAME=MSTKN-H-S14-HM-WLAN-24V v5
+    set FILENAME=Zellmodul
+    ::.\collada2gltf\COLLADA2GLTF-bin "%MODELPATH%\%FILENAME%.dae" "%MODELPATH%\%FILENAME%.glTF"
+    .\collada2gltf\COLLADA2GLTF-bin "%MODELPATH%\%FILENAME%.dae" "%MODELPATH%\%FILENAME%.glb" -b true
+
+
+
+
 ## Projects using pycollada
 
 * [FreeCAD COLLADA Import/Export](https://www.freecadweb.org/)
